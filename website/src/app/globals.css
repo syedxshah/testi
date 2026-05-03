@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   4F STUDIO — DESIGN SYSTEM
+   Gulf Market Edition
+   ═══════════════════════════════════════════════ */
+
+/* ---------- Theme Tokens ---------- */
+@theme {
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-light: #3B82F6;
+  --color-brand-blue-dim: #1D4ED8;
+  --color-brand-gold: #C9A84C;
+  --color-brand-gold-light: #D4B85A;
+  --color-brand-gold-dim: #B8973E;
+  --color-bg-deep: #0A0A0F;
+  --color-bg-card: #111118;
+  --color-bg-card-hover: #16161F;
+  --color-bg-surface: #0D0D14;
+  --color-border-subtle: #1A1A24;
+  --color-border-blue: rgba(37, 99, 235, 0.2);
+  --color-text-primary: #F1F1F4;
+  --color-text-secondary: #8B8B9E;
+  --color-text-dim: #4A4A5A;
+  --color-success: #22C55E;
+
+  --font-heading: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-brand-blue);
+  color: white;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ---------- Glass Card ---------- */
+.glass-card {
+  background: linear-gradient(135deg, rgba(17, 17, 24, 0.8), rgba(13, 13, 20, 0.6));
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--color-border-blue);
+  background: linear-gradient(135deg, rgba(22, 22, 31, 0.9), rgba(17, 17, 24, 0.7));
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px -15px rgba(37, 99, 235, 0.15),
+              0 0 0 1px rgba(37, 99, 235, 0.1);
+}
+
+/* ---------- Gold Accent Line ---------- */
+.gold-accent {
+  background: linear-gradient(90deg, transparent, var(--color-brand-gold), transparent);
+  height: 1px;
+}
+
+/* ---------- Blue Gradient Text ---------- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-brand-blue), #60A5FA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, var(--color-brand-gold), var(--color-brand-gold-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Section Spacing ---------- */
+.section-padding {
+  padding: 96px 0;
+}
+
+/* ---------- Container ---------- */
+.container-custom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .container-custom {
+    padding: 0 48px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-custom {
+    padding: 0 64px;
+  }
+}
+
+/* ---------- Animated Background Grid ---------- */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ---------- WhatsApp Pulse ---------- */
+@keyframes whatsapp-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.whatsapp-pulse {
+  animation: whatsapp-pulse 2s infinite;
+}
+
+/* ---------- Shimmer ---------- */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-border {
+  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-blue);
+}
