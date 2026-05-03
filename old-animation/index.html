@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4F Studio — Enterprise Digital Solutions</title>
+    <meta name="description" content="4F Studio — Premium enterprise digital solutions for GCC executives. High-tech interfaces, precision engineering, modern innovation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Cinematic Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+    <canvas id="lightRayCanvas"></canvas>
+
+    <!-- Ambient Light Orbs -->
+    <div class="ambient-orb orb-blue-1"></div>
+    <div class="ambient-orb orb-blue-2"></div>
+    <div class="ambient-orb orb-gold-1"></div>
+    <div class="ambient-orb orb-gold-2"></div>
+
+    <!-- Floating Glass Scene -->
+    <div class="scene" id="scene">
+
+        <!-- Floating Glass Card 1 — Dashboard Analytics -->
+        <div class="float-element glass-card card-dashboard" data-speed="0.4" data-amplitude="20" data-phase="0">
+            <div class="card-edge-glow"></div>
+            <div class="card-inner">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 3v18h18"/>
+                            <path d="M7 16l4-8 4 4 4-6"/>
+                        </svg>
+                    </div>
+                    <span class="card-label">Analytics</span>
+                    <div class="card-status live">LIVE</div>
+                </div>
+                <div class="card-chart">
+                    <div class="chart-bar" style="--h:40%"><span>Q1</span></div>
+                    <div class="chart-bar" style="--h:65%"><span>Q2</span></div>
+                    <div class="chart-bar" style="--h:85%"><span>Q3</span></div>
+                    <div class="chart-bar" style="--h:72%"><span>Q4</span></div>
+                    <div class="chart-bar" style="--h:90%"><span>Q5</span></div>
+                    <div class="chart-bar" style="--h:55%"><span>Q6</span></div>
+                </div>
+                <div class="card-metric">
+                    <span class="metric-value">$4.2M</span>
+                    <span class="metric-change positive">↑ 24.8%</span>
+                </div>
+            </div>
+            <div class="gold-reflection"></div>
+        </div>
+
+        <!-- Floating Glass Card 2 — Cloud Infrastructure -->
+        <div class="float-element glass-card card-cloud" data-speed="0.3" data-amplitude="25" data-phase="1.2">
+            <div class="card-edge-glow"></div>
+            <div class="card-inner">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6.5 19a4.5 4.5 0 0 1-.42-8.98A7 7 0 0 1 18.42 8 4 4 0 0 1 18 16"/>
+                            <path d="M12 13v8"/>
+                            <path d="M8 17l4-4 4 4"/>
+                        </svg>
+                    </div>
+                    <span class="card-label">Cloud Sync</span>
+                    <div class="card-status active">ACTIVE</div>
+                </div>
+                <div class="cloud-nodes">
+                    <div class="node n1"><div class="node-pulse"></div></div>
+                    <div class="node n2"><div class="node-pulse"></div></div>
+                    <div class="node n3"><div class="node-pulse"></div></div>
+                    <div class="node-line l1"></div>
+                    <div class="node-line l2"></div>
+                    <div class="node-line l3"></div>
+                </div>
+                <div class="card-metric">
+                    <span class="metric-value">99.97%</span>
+                    <span class="metric-label">Uptime</span>
+                </div>
+            </div>
+            <div class="gold-reflection"></div>
+        </div>
+
+        <!-- Floating Glass Card 3 — Security Shield -->
+        <div class="float-element glass-card card-security" data-speed="0.35" data-amplitude="18" data-phase="2.4">
+            <div class="card-edge-glow"></div>
+            <div class="card-inner">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2l8 4v6c0 5.25-3.5 10-8 11-4.5-1-8-5.75-8-11V6l8-4z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <span class="card-label">Security</span>
+                    <div class="card-status secure">SECURE</div>
+                </div>
+                <div class="shield-visual">
+                    <div class="shield-ring ring-1"></div>
+                    <div class="shield-ring ring-2"></div>
+                    <div class="shield-ring ring-3"></div>
+                    <div class="shield-core"></div>
+                </div>
+                <div class="card-metric">
+                    <span class="metric-value">256-bit</span>
+                    <span class="metric-label">Encrypted</span>
+                </div>
+            </div>
+            <div class="gold-reflection"></div>
+        </div>
+
+        <!-- Floating Glass Card 4 — AI Processing -->
+        <div class="float-element glass-card card-ai" data-speed="0.25" data-amplitude="22" data-phase="3.6">
+            <div class="card-edge-glow"></div>
+            <div class="card-inner">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2a4 4 0 0 0-4 4c0 2 2 3 2 6H14c0-3 2-4 2-6a4 4 0 0 0-4-4z"/>
+                            <path d="M10 12h4"/>
+                            <path d="M10 15h4"/>
+                            <path d="M10 18h4"/>
+                            <path d="M12 18v4"/>
+                        </svg>
+                    </div>
+                    <span class="card-label">AI Engine</span>
+                    <div class="card-status processing">LEARNING</div>
+                </div>
+                <div class="ai-waves">
+                    <div class="wave w1"></div>
+                    <div class="wave w2"></div>
+                    <div class="wave w3"></div>
+                    <div class="wave w4"></div>
+                    <div class="wave w5"></div>
+                </div>
+                <div class="card-metric">
+                    <span class="metric-value">14.2B</span>
+                    <span class="metric-label">Parameters</span>
+                </div>
+            </div>
+            <div class="gold-reflection"></div>
+        </div>
+
+        <!-- 3D Software Icons -->
+        <div class="float-element icon-3d icon-code" data-speed="0.5" data-amplitude="30" data-phase="0.8">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <div class="float-element icon-3d icon-database" data-speed="0.45" data-amplitude="26" data-phase="1.8">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <div class="float-element icon-3d icon-globe" data-speed="0.38" data-amplitude="28" data-phase="2.8">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M2 12h20"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <div class="float-element icon-3d icon-cpu" data-speed="0.42" data-amplitude="24" data-phase="3.2">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                    <rect x="9" y="9" width="6" height="6"/>
+                    <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <div class="float-element icon-3d icon-terminal" data-speed="0.33" data-amplitude="20" data-phase="4.0">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="3" width="20" height="18" rx="2"/>
+                    <path d="M7 8l4 4-4 4"/>
+                    <path d="M13 16h4"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <div class="float-element icon-3d icon-api" data-speed="0.48" data-amplitude="32" data-phase="4.8">
+            <div class="icon-glow"></div>
+            <div class="icon-face front">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                    <line x1="4" y1="22" x2="4" y2="15"/>
+                </svg>
+            </div>
+            <div class="icon-face back"></div>
+            <div class="icon-face left"></div>
+            <div class="icon-face right"></div>
+            <div class="icon-face top"></div>
+            <div class="icon-face bottom"></div>
+        </div>
+
+        <!-- Floating Geometric Shapes -->
+        <div class="float-element geo-shape shape-hex" data-speed="0.2" data-amplitude="35" data-phase="0.5"></div>
+        <div class="float-element geo-shape shape-ring" data-speed="0.28" data-amplitude="30" data-phase="1.5"></div>
+        <div class="float-element geo-shape shape-diamond" data-speed="0.22" data-amplitude="25" data-phase="2.5"></div>
+        <div class="float-element geo-shape shape-tri" data-speed="0.18" data-amplitude="28" data-phase="3.5"></div>
+    </div>
+
+    <!-- Center Brand Mark -->
+    <div class="brand-center" id="brandCenter">
+        <div class="brand-ring ring-outer"></div>
+        <div class="brand-ring ring-middle"></div>
+        <div class="brand-ring ring-inner"></div>
+        <div class="brand-logo">
+            <span class="brand-4f">4F</span>
+            <span class="brand-studio">STUDIO</span>
+        </div>
+        <div class="brand-tagline">Enterprise Digital Solutions</div>
+    </div>
+
+    <!-- Scan Lines Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Vignette -->
+    <div class="vignette"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

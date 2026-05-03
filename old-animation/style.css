@@ -1,0 +1,817 @@
+/* ============================================
+   4F STUDIO — CINEMATIC GLASS INTERFACE
+   Premium Enterprise Animation
+   ============================================ */
+
+/* ---------- Design Tokens ---------- */
+:root {
+    --bg-deep: #0A0A0F;
+    --bg-subtle: #0D0D14;
+    --blue-primary: #2563EB;
+    --blue-glow: #3B82F6;
+    --blue-light: #60A5FA;
+    --blue-dim: rgba(37, 99, 235, 0.15);
+    --blue-ultra-dim: rgba(37, 99, 235, 0.06);
+    --gold-primary: #C9A84C;
+    --gold-glow: #D4B85A;
+    --gold-light: #E2CC7A;
+    --gold-dim: rgba(201, 168, 76, 0.15);
+    --glass-bg: rgba(15, 15, 25, 0.55);
+    --glass-border: rgba(37, 99, 235, 0.18);
+    --glass-highlight: rgba(255, 255, 255, 0.04);
+    --text-primary: rgba(255, 255, 255, 0.92);
+    --text-secondary: rgba(255, 255, 255, 0.55);
+    --text-dim: rgba(255, 255, 255, 0.25);
+    --font-primary: 'Outfit', sans-serif;
+    --font-secondary: 'Inter', sans-serif;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-deep);
+    font-family: var(--font-secondary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Canvas Layers ---------- */
+#particleCanvas,
+#lightRayCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#lightRayCanvas {
+    z-index: 2;
+    mix-blend-mode: screen;
+}
+
+/* ---------- Ambient Orbs ---------- */
+.ambient-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.orb-blue-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.12), transparent 70%);
+    top: -10%;
+    left: -5%;
+    animation: orbFloat1 25s ease-in-out infinite;
+}
+
+.orb-blue-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+    bottom: -15%;
+    right: -10%;
+    animation: orbFloat2 30s ease-in-out infinite;
+}
+
+.orb-gold-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(201, 168, 76, 0.06), transparent 70%);
+    top: 20%;
+    right: 10%;
+    animation: orbFloat3 28s ease-in-out infinite;
+}
+
+.orb-gold-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(201, 168, 76, 0.04), transparent 70%);
+    bottom: 10%;
+    left: 15%;
+    animation: orbFloat4 32s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(80px, 60px) scale(1.15); }
+    66% { transform: translate(-40px, 30px) scale(0.9); }
+}
+
+@keyframes orbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-70px, -50px) scale(1.1); }
+    66% { transform: translate(50px, -30px) scale(0.95); }
+}
+
+@keyframes orbFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-60px, 40px) scale(1.2); }
+}
+
+@keyframes orbFloat4 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, -35px) scale(1.1); }
+}
+
+/* ---------- Scene ---------- */
+.scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    perspective: 1200px;
+    perspective-origin: 50% 50%;
+    z-index: 5;
+}
+
+/* ---------- Float Elements ---------- */
+.float-element {
+    position: absolute;
+    will-change: transform;
+    transition: filter 0.6s ease;
+}
+
+/* ---------- Glass Card Base ---------- */
+.glass-card {
+    width: 280px;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    overflow: hidden;
+    cursor: default;
+    transform-style: preserve-3d;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.5), rgba(201, 168, 76, 0.3), transparent);
+    z-index: 2;
+}
+
+.glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--glass-highlight), transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Card Edge Glow */
+.card-edge-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: conic-gradient(from 0deg, transparent, var(--blue-primary), transparent, var(--gold-primary), transparent);
+    opacity: 0;
+    z-index: -1;
+    filter: blur(6px);
+    transition: opacity 0.8s ease;
+    animation: edgeRotate 8s linear infinite;
+}
+
+.glass-card:hover .card-edge-glow {
+    opacity: 0.4;
+}
+
+@keyframes edgeRotate {
+    to { filter: blur(6px) hue-rotate(30deg); }
+}
+
+/* Gold Reflection */
+.gold-reflection {
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+    opacity: 0;
+    filter: blur(2px);
+    animation: goldReflect 6s ease-in-out infinite;
+}
+
+@keyframes goldReflect {
+    0%, 100% { opacity: 0; transform: scaleX(0.5); }
+    50% { opacity: 0.6; transform: scaleX(1); }
+}
+
+/* Card Inner */
+.card-inner {
+    padding: 20px;
+    position: relative;
+    z-index: 3;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.card-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--blue-dim);
+    color: var(--blue-light);
+    padding: 6px;
+}
+
+.card-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.card-label {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+.card-status {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.card-status.live {
+    background: rgba(37, 99, 235, 0.2);
+    color: var(--blue-light);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+.card-status.active {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+.card-status.secure {
+    background: rgba(201, 168, 76, 0.2);
+    color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(201, 168, 76, 0.3);
+}
+
+.card-status.processing {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Card Metric */
+.card-metric {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.metric-value {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.metric-change {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.metric-change.positive {
+    color: #4ade80;
+}
+
+.metric-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ---------- Dashboard Chart ---------- */
+.card-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 80px;
+    padding: 8px 0;
+}
+
+.chart-bar {
+    flex: 1;
+    height: var(--h);
+    background: linear-gradient(180deg, var(--blue-primary), rgba(37, 99, 235, 0.2));
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    transition: height 0.6s ease;
+    animation: barGrow 2s ease-out forwards;
+    transform-origin: bottom;
+}
+
+.chart-bar span {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+}
+
+.chart-bar:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.chart-bar:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+@keyframes barGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+/* ---------- Cloud Nodes ---------- */
+.cloud-nodes {
+    position: relative;
+    height: 70px;
+    margin: 8px 0;
+}
+
+.node {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--blue-primary);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+}
+
+.node.n1 { top: 15px; left: 20%; }
+.node.n2 { top: 40px; left: 55%; }
+.node.n3 { top: 10px; left: 80%; }
+
+.node-pulse {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid var(--blue-light);
+    animation: nodePulse 2.5s ease-out infinite;
+}
+
+.node.n2 .node-pulse { animation-delay: 0.8s; }
+.node.n3 .node-pulse { animation-delay: 1.6s; }
+
+@keyframes nodePulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+.node-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, var(--blue-primary), transparent);
+    opacity: 0.3;
+    animation: lineFlow 3s linear infinite;
+}
+
+.node-line.l1 { top: 21px; left: 24%; width: 31%; transform: rotate(38deg); }
+.node-line.l2 { top: 30px; left: 58%; width: 24%; transform: rotate(-50deg); }
+.node-line.l3 { top: 15px; left: 22%; width: 58%; }
+
+@keyframes lineFlow {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0.1; }
+}
+
+/* ---------- Shield Visual ---------- */
+.shield-visual {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 8px auto;
+}
+
+.shield-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: shieldRotate 10s linear infinite;
+}
+
+.shield-ring.ring-1 {
+    inset: 0;
+    border-color: rgba(201, 168, 76, 0.3);
+}
+
+.shield-ring.ring-2 {
+    inset: 10px;
+    border-color: rgba(37, 99, 235, 0.3);
+    animation-direction: reverse;
+    animation-duration: 8s;
+}
+
+.shield-ring.ring-3 {
+    inset: 20px;
+    border-color: rgba(201, 168, 76, 0.2);
+    animation-duration: 6s;
+}
+
+.shield-core {
+    position: absolute;
+    inset: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--gold-primary), transparent);
+    opacity: 0.4;
+    animation: corePulse 3s ease-in-out infinite;
+}
+
+@keyframes shieldRotate {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes corePulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* ---------- AI Waves ---------- */
+.ai-waves {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 50px;
+    padding: 10px 0;
+}
+
+.wave {
+    width: 3px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #a855f7, rgba(168, 85, 247, 0.2));
+    animation: waveMove 1.4s ease-in-out infinite;
+}
+
+.wave.w1 { height: 20px; animation-delay: 0s; }
+.wave.w2 { height: 35px; animation-delay: 0.15s; }
+.wave.w3 { height: 45px; animation-delay: 0.3s; }
+.wave.w4 { height: 30px; animation-delay: 0.45s; }
+.wave.w5 { height: 18px; animation-delay: 0.6s; }
+
+@keyframes waveMove {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+
+/* ---------- Card Positions ---------- */
+.card-dashboard { top: 8%; left: 5%; }
+.card-cloud { top: 12%; right: 8%; }
+.card-security { bottom: 15%; left: 8%; }
+.card-ai { bottom: 10%; right: 5%; }
+
+/* ---------- 3D Software Icons ---------- */
+.icon-3d {
+    width: 64px;
+    height: 64px;
+    transform-style: preserve-3d;
+    animation: iconSpin 20s linear infinite;
+}
+
+.icon-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.2), transparent 70%);
+    pointer-events: none;
+}
+
+.icon-face {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: visible;
+}
+
+.icon-face.front {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(15, 15, 25, 0.7));
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    backdrop-filter: blur(12px);
+    transform: translateZ(32px);
+    color: var(--blue-light);
+    padding: 14px;
+}
+
+.icon-face.back {
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.1), rgba(15, 15, 25, 0.7));
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    transform: translateZ(-32px) rotateY(180deg);
+}
+
+.icon-face.left {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 15, 25, 0.6));
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    transform: rotateY(-90deg) translateZ(32px);
+}
+
+.icon-face.right {
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(15, 15, 25, 0.6));
+    border: 1px solid rgba(201, 168, 76, 0.1);
+    transform: rotateY(90deg) translateZ(32px);
+}
+
+.icon-face.top {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(15, 15, 25, 0.6));
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    transform: rotateX(90deg) translateZ(32px);
+}
+
+.icon-face.bottom {
+    background: linear-gradient(135deg, rgba(15, 15, 25, 0.8), rgba(15, 15, 25, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transform: rotateX(-90deg) translateZ(32px);
+}
+
+.icon-face.front svg {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes iconSpin {
+    0% { transform: rotateY(0deg) rotateX(5deg); }
+    100% { transform: rotateY(360deg) rotateX(5deg); }
+}
+
+/* Icon Positions & Speeds */
+.icon-code { top: 30%; left: 38%; animation-duration: 25s; }
+.icon-database { top: 55%; left: 28%; animation-duration: 30s; animation-direction: reverse; }
+.icon-globe { top: 25%; right: 30%; animation-duration: 22s; }
+.icon-cpu { top: 65%; right: 28%; animation-duration: 28s; animation-direction: reverse; }
+.icon-terminal { top: 42%; left: 18%; animation-duration: 35s; }
+.icon-api { top: 48%; right: 15%; animation-duration: 32s; animation-direction: reverse; }
+
+/* ---------- Geometric Shapes ---------- */
+.geo-shape {
+    opacity: 0.15;
+}
+
+.shape-hex {
+    top: 15%; left: 45%;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--blue-primary);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    animation: geoSpin 20s linear infinite;
+}
+
+.shape-ring {
+    top: 70%; left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--gold-primary);
+    border-radius: 50%;
+    animation: geoSpin 25s linear infinite reverse;
+}
+
+.shape-diamond {
+    top: 35%; right: 20%;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--blue-light);
+    transform: rotate(45deg);
+    animation: geoFloat 15s ease-in-out infinite;
+}
+
+.shape-tri {
+    bottom: 25%; left: 35%;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 32px solid rgba(201, 168, 76, 0.15);
+    animation: geoSpin 30s linear infinite;
+}
+
+@keyframes geoSpin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes geoFloat {
+    0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.15; }
+    50% { transform: rotate(45deg) translateY(-20px); opacity: 0.3; }
+}
+
+/* ---------- Brand Center ---------- */
+.brand-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.brand-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+}
+
+.brand-ring.ring-outer {
+    width: 280px;
+    height: 280px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: rgba(37, 99, 235, 0.08);
+    animation: ringPulse 6s ease-in-out infinite;
+}
+
+.brand-ring.ring-middle {
+    width: 220px;
+    height: 220px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: rgba(37, 99, 235, 0.12);
+    animation: ringPulse 6s ease-in-out infinite 1s;
+}
+
+.brand-ring.ring-inner {
+    width: 160px;
+    height: 160px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: rgba(201, 168, 76, 0.1);
+    animation: ringPulse 6s ease-in-out infinite 2s;
+}
+
+@keyframes ringPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.4; }
+}
+
+.brand-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.brand-4f {
+    font-family: var(--font-primary);
+    font-weight: 800;
+    font-size: 72px;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--blue-primary), var(--blue-light), var(--gold-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(37, 99, 235, 0.4));
+    line-height: 1;
+}
+
+.brand-studio {
+    font-family: var(--font-primary);
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 0.45em;
+    color: var(--gold-primary);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.brand-tagline {
+    font-family: var(--font-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: 20px;
+    opacity: 0.6;
+}
+
+/* ---------- Scanlines Overlay ---------- */
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+    opacity: 0.3;
+}
+
+/* ---------- Vignette ---------- */
+.vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 45;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(10, 10, 15, 0.4) 70%,
+        rgba(10, 10, 15, 0.85) 100%
+    );
+}
+
+/* ---------- Loading Fade In ---------- */
+.scene,
+.brand-center {
+    animation: sceneIn 2.5s ease-out forwards;
+}
+
+.brand-center {
+    animation: brandIn 3s ease-out forwards;
+}
+
+@keyframes sceneIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes brandIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1200px) {
+    .glass-card { width: 240px; }
+    .brand-4f { font-size: 56px; }
+    .brand-studio { font-size: 18px; }
+}
+
+@media (max-width: 768px) {
+    .glass-card { width: 200px; }
+    .card-inner { padding: 14px; }
+    .metric-value { font-size: 18px; }
+    .brand-4f { font-size: 44px; }
+    .brand-studio { font-size: 14px; }
+    .brand-ring.ring-outer { width: 200px; height: 200px; }
+    .brand-ring.ring-middle { width: 160px; height: 160px; }
+    .brand-ring.ring-inner { width: 120px; height: 120px; }
+    .icon-3d { width: 48px; height: 48px; }
+}
